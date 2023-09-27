@@ -13,17 +13,13 @@ int CDCommand::Execute() {
         return -1;
     }
     else if (args.empty() || args[0] == "~") {
-        if (cli->env->chdir(cli->env->getenv("HOME")) == 0) {
-            return 0;
-        } else {
-            *cli->standardError << "An error has occurred\n";
-            return -1;
-        }
-    }
-    else if (!args.empty() && cli->env->chdir(args[0]) == 0) {
-        return 0;
-    } else {
+        if (cli->env->chdir(cli->env->getenv("HOME")) == 0) return 0;
         *cli->standardError << "An error has occurred\n";
         return -1;
     }
+    else if (!args.empty() && cli->env->chdir(args[0]) == 0) {
+        return 0;
+    } 
+    *cli->standardError << "An error has occurred\n";
+    return -1;
 }
