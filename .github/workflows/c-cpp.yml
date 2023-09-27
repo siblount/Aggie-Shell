@@ -1,19 +1,36 @@
-name: C/C++ CI
+name: Create Release
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-  build:
-
+  create_release:
+    name: Create Release
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    #- name: configure
-    #  run: ./configure
-    - name: make
-      run: make
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Release
+        run: make release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: A new version of Aggie Shell has been released.
+          draft: false
+          prerelease: true
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/my-app.zip
+          asset_name: my-app.zip
+          asset_content_type: application/zip
