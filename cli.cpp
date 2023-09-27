@@ -51,10 +51,10 @@ std::string CLI::GetAshSuffix() {
     // If the current working directory is the home directory, then just add a ">" to the string builder
     
     if (cwd == home) {
-        sb << " >";
+        sb << " > ";
     } else // Otherwise, add the current working directory to the string builder
     { 
-        sb << " " << cwd << ">";
+        sb << " " << cwd << "> ";
     }
     std::string suffix = sb.str(); // Put everything in the string builder into a string (and free the buffer in the string builder)
     return suffix;
