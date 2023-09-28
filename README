@@ -11,22 +11,7 @@ DO NOT ATTEMPT TO BUILD WITH ONLY "ash.cpp", THE EASIEST WAY TO BUILD THE PROGRA
 
 There are multiple ways to compile and run this program:
 
-1) Visual Studio Code on Linux, VSC on WSL, Ubuntu on Windows, Debian on Windows, etc:
-    a) Hit the play button on the top-right corner on VSC.
-    b) A dialogue will pop up to prompt for which task; choose the one with "C/C++: g++ build ash" label! DO NOT CHOOSE THE GCC OR ANY OTHER ONE.
-    c) A terminal may pop up. If you do not see it, it may be because you are in "Debug Console" tab. Click on Terminal to interact with the program.
-
-NOTE: You may need the C/C++ extension for this to work.
-
-2) Via make
-    a) Open up a terminal and cd to the root project folder.
-    b) type "make" or "make -s" (hides the commands being run)
-    c) If no errors outputted, then you should see the executable in the bin.
-    d) Run the command via the terminal "bin/ash" or just "ash" if you cd into bin.
-
-NOTE: If you do not have make installed, you can not run option #2.
-
-3) Manual g++ build *may be out-of-date*
+1) Manual g++ build *may be out-of-date*
     a) Make sure the current working directory is at the project root folder.
         - This means when you type "ls" you should see the Makefile, ash.cpp, etc.
         - If you do not, you need to cd into the project root folder.
@@ -35,3 +20,19 @@ NOTE: If you do not have make installed, you can not run option #2.
 
 NOTE: If any errors occur, you either did not follow the instructions, missing files, or you are running this on Mac or Windows.
 It has not been tested on Mac, but only Linux.
+
+2) Via make (preferred)
+    a) Open up a terminal and cd to the root project folder.
+    b) type "make" or "make -s" (hides the commands being run)
+    c) If no errors outputted, then you should see the executable in the bin folder.
+    d) Run the command via the terminal "bin/ash" or just "./ash" if you cd into bin.
+
+NOTE: If you do not have make installed, you can not run option #2.
+
+3) Visual Studio Code on Linux, VSC on WSL, Ubuntu on Windows, Debian on Windows, etc:
+    a) Select ash.cpp
+    b) Hit the play button on the top-right corner on VSC.
+    c) A dialogue will pop up to prompt for which task; choose the one with "C/C++: g++ build ash" label! DO NOT CHOOSE ANY OTHER ONE.
+    d) A terminal may pop up. If you do not see it, it may be because you are in "Debug Console" tab. Click on Terminal to interact with the program.
+
+NOTE: You may need the C/C++ extension for this to work.
