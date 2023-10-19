@@ -26,7 +26,22 @@ Command& CommandFactory::GetCommand(std::string name, std::vector<std::string> a
         return *new ExitCommand(&cli, args, __stdin, __stdout);
     } else if (name == "path") {
         return *new PathCommand(&cli, args, __stdin, __stdout);
+    } else if (ExternalCommandExists(name)) {
+        // Pass in the name as part of the argument.
+        args.insert(args.begin(), name);
+        return *new ExternalCommand(&cli, args, __stdin, __stdout);
     }
+
+    // If the command was not found in any of the directories, throw an error.
+    throw std::runtime_error("Command not found");
+}
+
+bool CommandFactory::ExternalCommandExists(std::string name) {
+    // First check if it exists in the current directory (or an absolute path was given).
+
+    // Check to see if we can access and execute the program.
+    if (access(name.c_str(), X_OK) == 0) return true;
+    // If it doesn't exist in the current directory, check through the PATH environment variable.
 
     // Get the directories listed in the PATH environment variable.
     std::stringstream path(cli.env->getenv("PATH"));
@@ -35,15 +50,11 @@ Command& CommandFactory::GetCommand(std::string name, std::vector<std::string> a
         // Construct the full path to the command.
         std::string full_path = dir + "/" + name;
 
-        // Check if the command is an executable file.
-        auto result = access(full_path.c_str(), X_OK);
-        if (result == 0) {
-            // Pass in the name as part of the argument.
-            args.insert(args.begin(), name);
-            return *new ExternalCommand(&cli, args, __stdin, __stdout);
-        }
+        // Check to see if we can access and execute the program.
+        if (access(full_path.c_str(), X_OK) == 0) return true;
     }
 
-    // If the command was not found in any of the directories, throw an error.
-    throw std::runtime_error("Command not found");
+    // We checked in the current directory (or the absolute path) and the PATH environment variable
+    // and the program was not executable, does not exist on disk, or do not have permission to execute it.
+    return false;
 }

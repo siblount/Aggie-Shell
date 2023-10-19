@@ -10,6 +10,11 @@
 
 /// @brief The command factory.
 class CommandFactory {
+    /// @brief Checks if the external command exists.
+    /// @param name The name (or path) of the program to check
+    /// @return True if the external command exists, false otherwise.
+    bool ExternalCommandExists(std::string name);
+    
     public:
         /// @brief The CLI options that will be passed to the commands.
         CLI& cli;
