@@ -8,16 +8,16 @@
 CDCommand::CDCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout) : Command(cli, args, __stdin, __stdout) {}
 
 int CDCommand::Execute() {
-    if (args.size() > 1) {
+    if (args.empty() || args.size() > 1) {
         *cli->standardError << "An error has occurred\n";
         return -1;
     }
-    else if (args.empty() || args[0] == "~") {
+    else if (args[0] == "~") {
         if (cli->env->chdir(cli->env->getenv("HOME")) == 0) return 0;
         *cli->standardError << "An error has occurred\n";
         return -1;
     }
-    else if (!args.empty() && cli->env->chdir(args[0]) == 0) {
+    else if (cli->env->chdir(args[0]) == 0) {
         return 0;
     } 
     *cli->standardError << "An error has occurred\n";
