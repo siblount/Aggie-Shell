@@ -54,8 +54,8 @@ int ExternalCommand::Execute() {
         // End the array with a null pointer.
         arr[args.size()] = nullptr;
 
-        // Execute the program.
-        return execvp(args[0].c_str(), arr.get());
+        // Execute the program and exit with the exit code of the program.
+        exit(execvp(args[0].c_str(), arr.get()));
 
     }
 
@@ -71,16 +71,16 @@ int ExternalCommand::Execute() {
         int status;
         waitpid(pid, &status, 0);
 
+        // Restore stdout.
+        dup2(stdout_copy, STDOUT_FILENO);
+        
         // Relay the output from the child process to the standard output.
         char buffer[1024];
         ssize_t nread;
         while ((nread = read(pipe.GetReadPipe(), buffer, sizeof(buffer))) != 0) {
             *standardOutput << std::string(buffer, nread);
         }
-
-        // Restore stdout.
-        dup2(stdout_copy, STDOUT_FILENO);
-
+        
         // Close the pipe.
         close(pipe.GetReadPipe());
 
