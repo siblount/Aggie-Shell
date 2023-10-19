@@ -3,6 +3,7 @@
 #include "exit_command_tests.hpp"
 #include "path_command_tests.hpp"
 #include "command_parser_tests.hpp"
+#include "external_command_tests.hpp"
 
 int main() {
     CLITests::ExecuteTests();
@@ -10,5 +11,7 @@ int main() {
     ExitCommandTests::ExecuteTests();
     PathCommandTests::ExecuteTests();
     CommandParserTests::ExecuteTests();
+    ExternalCommandTests::ExecuteTests();
+    
     return 0;
 }
