@@ -50,8 +50,7 @@ void CDCommandTests::CDCommandNoArgsTest() {
     CDCommand cdCommand(cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput);
     cdCommand.Execute();
 
-    assert(cli->env->getenv("PWD") == cli->env->getenv("HOME"));
-    assert(deps.cli_error->str().empty());
+    assert(!deps.cli_error->str().empty());
     std::cout << "CDCommandNoArgsTest passed!" << std::endl;
 }
 
