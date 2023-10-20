@@ -1,5 +1,5 @@
 SRC = $(wildcard *.cpp) $(wildcard commands/*.cpp)
-TESTSRC = $(wildcard tests/*.cpp) $(wildcard commands/*.cpp) $(wildcard tests/fakes/*.cpp)  $(wildcard tests/util/*.cpp) command_factory.cpp os_environment.cpp command_parser.cpp cli.cpp 
+TESTSRC = $(wildcard tests/*.cpp) $(wildcard commands/*.cpp) $(wildcard tests/fakes/*.cpp)  $(wildcard tests/util/*.cpp) command_factory.cpp os_environment.cpp command_parser.cpp cli.cpp ofstream_extended.cpp
 TESTDEFINE = -DTEST
 BINDIR = bin
 

@@ -39,6 +39,7 @@
                 "../os_environment.cpp",
                 "../command_parser.cpp",
                 "../commands/*.cpp",
+                "../ofstream_extended.cpp",
                 "fakes/*.cpp",
                 "util/*.cpp",
                 "*.cpp",
