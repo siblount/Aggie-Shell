@@ -12,5 +12,8 @@ namespace CommandParserTests {
     void CommandParserTrailingWhitespaceTest();
     void CommandParserLeadingWhitespaceTest();
     void CommandParserEmptyStringTest();
+    void CommandParserWithQuotesTest();
+    void CommandParserWithNestedQuotesTest();
+    void CommandParserWithUnfinishedQuotesTest();
     void ExecuteTests();
 }

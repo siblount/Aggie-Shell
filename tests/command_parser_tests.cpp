@@ -134,6 +134,65 @@ void CommandParserTests::CommandParserEmptyStringTest() {
     std::cout << "CommandParserEmptyStringTest passed!" << std::endl;
 }
 
+void CommandParserTests::CommandParserWithQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto& cmd = parser.Parse("cd \"hello world\"");
+        assert(typeid(cmd) == typeid(CDCommand));
+        assert(cmd.args.size() == 1);
+        assert(cmd.args[0] == "hello world");
+    } catch (...) {
+        std::cout << "CommandParserWithQuotesTest failed!" << std::endl;
+        return;
+    }
+
+    std::cout << "CommandParserWithQuotesTest passed!" << std::endl;
+}
+
+void CommandParserTests::CommandParserWithNestedQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto& cmd = parser.Parse("cd \"hello \"world\"\"");
+        assert(typeid(cmd) == typeid(CDCommand));
+        assert(cmd.args.size() == 1);
+        assert(cmd.args[0] == "hello \"world\"");
+    } catch (...) {
+        std::cout << "CommandParserWithNestedQuotesTest failed!" << std::endl;
+        return;
+    }
+
+    std::cout << "CommandParserWithNestedQuotesTest passed!" << std::endl;
+}
+
+void CommandParserTests::CommandParserWithUnfinishedQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto& cmd = parser.Parse("cd \"hello world");
+        assert(typeid(cmd) == typeid(CDCommand));
+        assert(cmd.args.size() == 2);
+        assert(cmd.args[0] == "\"hello");
+        assert(cmd.args[1] == "world");
+
+    } catch (...) {
+        std::cout << "CommandParserWithUnfinishedQuotesTest failed!" << std::endl;
+        return;
+    }
+
+    std::cout << "CommandParserWithUnfinishedQuotesTest passed!" << std::endl;
+}
+
 void CommandParserTests::ExecuteTests() {
     CommandParserTest();
     CommandParserBuiltinTests();
@@ -141,4 +200,7 @@ void CommandParserTests::ExecuteTests() {
     CommandParserTrailingWhitespaceTest();
     CommandParserLeadingWhitespaceTest();
     CommandParserEmptyStringTest();
+    CommandParserWithQuotesTest();
+    CommandParserWithNestedQuotesTest();
+    CommandParserWithUnfinishedQuotesTest();
 }
