@@ -10,8 +10,8 @@
 #include "external_command.hpp"
 #include "../cli.hpp"
 
-ExternalCommand::ExternalCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout) 
-    : Command(cli, args, __stdin, __stdout) {}
+ExternalCommand::ExternalCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout) 
+    : Command(cli, args, __stdin, __stderr, __stdout) {}
 
 struct Pipe {
     int fd[2];

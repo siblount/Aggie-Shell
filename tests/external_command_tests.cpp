@@ -25,7 +25,7 @@ void ExternalCommandTests::ExternalCommandTest() {
     auto cli = ExternalCommandTests::NewCLI(deps);
 
     try {
-        ExternalCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput};
+        ExternalCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput};
     } catch (...) {
         std::cout << "ExternalCommandTest failed!" << std::endl;
         return;
@@ -38,7 +38,7 @@ void ExternalCommandTests::ExternalCommandEchoTest() {
     auto deps = new CLIDependencies{};
     auto cli = ExternalCommandTests::NewCLI(deps);
     auto args = std::vector<std::string>{"echo", "hello", "world"};
-    ExternalCommand cmd{cli.get(), args, cli->standardInput, cli->standardOutput};
+    ExternalCommand cmd{cli.get(), args, cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == 0);
     assert(deps->cli_output->str().find("hello world") != std::string::npos);

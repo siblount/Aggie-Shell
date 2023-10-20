@@ -24,7 +24,7 @@ void PathCommandTests::PathCommandTest() {
     auto cli = PathCommandTests::NewCLI(deps);
 
     try {
-        PathCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput};
+        PathCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput};
     } catch (...) {
         std::cout << "PathCommandTest failed!" << std::endl;
         return;
@@ -36,7 +36,7 @@ void PathCommandTests::PathCommandTest() {
 void PathCommandTests::PathCommandNoArgsTest() {
     auto deps = new CLIDependencies{};
     auto cli = PathCommandTests::NewCLI(deps);
-    PathCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput};
+    PathCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == 0);
     assert(deps->env->getenv("PATH") == "");
@@ -47,7 +47,7 @@ void PathCommandTests::PathCommandNoArgsTest() {
 void PathCommandTests::PathCommandOneArgTest() {
     auto deps = new CLIDependencies{};
     auto cli = PathCommandTests::NewCLI(deps);
-    PathCommand cmd{cli.get(), std::vector<std::string>{"arg1"}, cli->standardInput, cli->standardOutput};
+    PathCommand cmd{cli.get(), std::vector<std::string>{"arg1"}, cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == 0);
     assert(deps->env->getenv("PATH") == "arg1");
@@ -58,7 +58,7 @@ void PathCommandTests::PathCommandOneArgTest() {
 void PathCommandTests::PathCommandMultipleArgTest() {
     auto deps = new CLIDependencies{};
     auto cli = PathCommandTests::NewCLI(deps);
-    PathCommand cmd{cli.get(), std::vector<std::string>{"arg1", "arg2", "arg3"}, cli->standardInput, cli->standardOutput};
+    PathCommand cmd{cli.get(), std::vector<std::string>{"arg1", "arg2", "arg3"}, cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == 0);
     assert(deps->env->getenv("PATH") == "arg1:arg2:arg3");

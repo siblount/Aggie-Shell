@@ -15,6 +15,8 @@ class Command {
         std::vector<std::string> args;
         /// @brief The standard input stream to use for the command.
         std::ostream* standardOutput;
+        /// @brief The standard error stream to use for the command.
+        std::ostream* standardError;
         /// @brief The standard output stream to use for the command.
         std::istream* standardInput;
         /// @brief Creates a new command with the given arguments, standard input, and standard output.
@@ -22,7 +24,7 @@ class Command {
         /// @param args The arguments to send to the command; do not include the command name itself or dashes.
         /// @param __stdin The standard input stream to use for the command. If NULL, will use default standard input.
         /// @param __stdout The standard output stream to use for the command. If NULL, will use default standard output.
-        Command(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout);
+        Command(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout);
         
         /// @brief Executes the command.
         /// @return The exit code of the command.

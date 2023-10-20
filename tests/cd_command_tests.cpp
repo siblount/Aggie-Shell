@@ -24,7 +24,7 @@ void CDCommandTests::CDCommandTest() {
     auto cli = CDCommandTests::NewCLI(&deps);
 
     try {
-        CDCommand(cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput);
+        CDCommand(cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput);
     } catch (std::exception& ex) {
         std::cout << "CDCommandTest failed!" << std::endl;
         return;
@@ -36,7 +36,7 @@ void CDCommandTests::CDCommandValidPathTest() {
     CLIDependencies deps;
     auto cli = CDCommandTests::NewCLI(&deps);
 
-    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/loser"}, cli->standardInput, cli->standardOutput);
+    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/loser"}, cli->standardInput, cli->standardError, cli->standardOutput);
     cdCommand.Execute();
 
     assert(cli->env->getenv("PWD") == "/loser");
@@ -47,7 +47,7 @@ void CDCommandTests::CDCommandNoArgsTest() {
     CLIDependencies deps;
     auto cli = CDCommandTests::NewCLI(&deps);
 
-    CDCommand cdCommand(cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput);
+    CDCommand cdCommand(cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput);
     cdCommand.Execute();
 
     assert(!deps.cli_error->str().empty());
@@ -62,7 +62,7 @@ void CDCommandTests::CDCommandBadPathTest() {
     auto cli = CDCommandTests::NewCLI(&deps);
     cli->env = &env;
 
-    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/the/secret/krabby/patty/formula/secure1234"}, cli->standardInput, cli->standardOutput);
+    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/the/secret/krabby/patty/formula/secure1234"}, cli->standardInput, cli->standardError, cli->standardOutput);
     cdCommand.Execute();
 
     assert(deps.cli_error->str().find("An error has occurred") != std::string::npos);
@@ -75,7 +75,7 @@ void CDCommandTests::CDCommandTooManyArgsTest() {
     CLIDependencies deps;
     auto cli = CDCommandTests::NewCLI(&deps);
 
-    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/loser", "/loser2"}, cli->standardInput, cli->standardOutput);
+    CDCommand cdCommand(cli.get(), std::vector<std::string>{"/loser", "/loser2"}, cli->standardInput, cli->standardError, cli->standardOutput);
     cdCommand.Execute();
 
     assert(deps.cli_error->str().find("An error has occurred") != std::string::npos);

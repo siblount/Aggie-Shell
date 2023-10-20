@@ -3,7 +3,8 @@
 #include <thread>
 #include <cstdlib>
 
-ExitCommand::ExitCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout) : Command(cli, args, __stdin, __stdout) {}
+ExitCommand::ExitCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout) : 
+    Command(cli, args, __stdin, __stderr, __stdout) {}
 
 int ExitCommand::Execute() {
     if (!args.empty()) {

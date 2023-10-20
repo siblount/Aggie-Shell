@@ -23,7 +23,7 @@ void ExitCommandTests::ExitCommandTest() {
     auto cli = ExitCommandTests::NewCLI(deps);
 
     try {
-        ExitCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput};
+        ExitCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput};
     } catch (...) {
         std::cout << "ExitCommandTest failed!" << std::endl;
         return;
@@ -35,7 +35,7 @@ void ExitCommandTests::ExitCommandTest() {
 void ExitCommandTests::ExitCommandNoArgsTest() {
     auto deps = new CLIDependencies{};
     auto cli = ExitCommandTests::NewCLI(deps);
-    ExitCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardOutput};
+    ExitCommand cmd{cli.get(), std::vector<std::string>(), cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == 0);
     assert(deps->cli_output->str().find("Exiting Aggie Shell by Solomon Blount...") != std::string::npos);
@@ -46,7 +46,7 @@ void ExitCommandTests::ExitCommandNoArgsTest() {
 void ExitCommandTests::ExitCommandTooManyArgsTest() {
     auto deps = new CLIDependencies{};
     auto cli = ExitCommandTests::NewCLI(deps);
-    ExitCommand cmd{cli.get(), std::vector<std::string>{"arg1"}, cli->standardInput, cli->standardOutput};
+    ExitCommand cmd{cli.get(), std::vector<std::string>{"arg1"}, cli->standardInput, cli->standardError, cli->standardOutput};
 
     assert(cmd.Execute() == -1);
     assert(deps->cli_output->str().empty());

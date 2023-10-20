@@ -5,6 +5,6 @@
 /// @brief Changes the PATH environment variable.
 class PathCommand : public Command {
     public:
-        PathCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout);
+        PathCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout);
         int Execute() override;
 };

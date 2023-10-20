@@ -5,7 +5,7 @@
 #include "../environment.hpp"
 #include "../cli.hpp"
 
-CDCommand::CDCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout) : Command(cli, args, __stdin, __stdout) {}
+CDCommand::CDCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout) : Command(cli, args, __stdin, __stderr, __stdout) {}
 
 int CDCommand::Execute() {
     if (args.empty() || args.size() > 1) {

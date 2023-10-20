@@ -6,6 +6,6 @@
 /// The command runs a program in a seperate thread and waits for it to finish.
 class ExternalCommand : public Command {
     public:
-        ExternalCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stdout);
+        ExternalCommand(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout);
         int Execute() override;
 };

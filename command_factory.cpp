@@ -21,15 +21,15 @@ Command& CommandFactory::GetCommand(std::string name, std::vector<std::string> a
 
 Command& CommandFactory::GetCommand(std::string name, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout) {
     if (name == "cd") {
-        return *new CDCommand(&cli, args, __stdin, __stdout);
+        return *new CDCommand(&cli, args, __stdin, __stderr, __stdout);
     } else if (name == "exit") {
-        return *new ExitCommand(&cli, args, __stdin, __stdout);
+        return *new ExitCommand(&cli, args, __stdin, __stderr, __stdout);
     } else if (name == "path") {
-        return *new PathCommand(&cli, args, __stdin, __stdout);
+        return *new PathCommand(&cli, args, __stdin, __stderr, __stdout);
     } else if (ExternalCommandExists(name)) {
         // Pass in the name as part of the argument.
         args.insert(args.begin(), name);
-        return *new ExternalCommand(&cli, args, __stdin, __stdout);
+        return *new ExternalCommand(&cli, args, __stdin, __stderr, __stdout);
     }
 
     // If the command was not found in any of the directories, throw an error.
