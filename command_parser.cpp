@@ -7,6 +7,7 @@
 #include "command_factory.hpp"
 #include "commands/command.hpp"
 #include "commands/nothing_command.hpp"
+#include "ofstream_extended.hpp"
 
 CommandParser::CommandParser(CommandFactory* factory) : factory{factory} {}
 
@@ -42,5 +43,23 @@ Command& CommandParser::Parse(std::string command) {
     // Remove the first token from the vector.
     std::string commandName = tokens[0];
     tokens.erase(tokens.begin());
+
+    // If there is more than one ">" character, then the command is invalid.
+    if (std::count(tokens.begin(), tokens.end(), ">") > 1) {
+        throw std::runtime_error("Too many redirects");
+    }
+
+    // Verify to see if we have redirected standard output to a file.
+    // If it contains the ">" character, then create a file stream to the next token in the vector.
+    auto it = std::find(tokens.begin(), tokens.end(), ">");
+    if (it != tokens.end()) {
+        // Create a file stream to the next token in the vector.
+        std::string fileName = *(it + 1);
+        auto file = new ofstream_extended(fileName);
+        // Remove both the ">" character and the token after that from the vector.
+        tokens.erase(it, it + 2);
+        return factory->GetCommand(commandName, tokens, &std::cin, file, file);
+    }
+    // Otherwise, use default stdin, stdout, and stderr.
     return factory->GetCommand(commandName, tokens);
 }

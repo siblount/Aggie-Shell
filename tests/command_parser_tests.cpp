@@ -3,6 +3,7 @@
 #include <memory>
 #include <sstream>
 #include <cassert>
+#include <fstream>
 
 #include "../cli.hpp"
 #include "../environment.hpp"
@@ -14,6 +15,8 @@
 #include "../commands/path_command.hpp"
 #include "../commands/cd_command.hpp"
 #include "../commands/nothing_command.hpp"
+#include "../commands/external_command.hpp"
+#include "../ofstream_extended.hpp"
 #include "command_parser_tests.hpp"
 
 std::shared_ptr<CLI> CommandParserTests::NewCLI(CLIDependencies* deps) {
@@ -193,6 +196,90 @@ void CommandParserTests::CommandParserWithUnfinishedQuotesTest() {
     std::cout << "CommandParserWithUnfinishedQuotesTest passed!" << std::endl;
 }
 
+void CommandParserTests::CommandParserRedirectTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("cd > hello.txt")));
+        assert(cmd->args.size() == 0);
+        auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
+        assert(stdOut != nullptr);
+        assert(stdOut->file_name == "hello.txt");
+
+    } catch (...) {
+        std::cout << "CommandParserRedirectTest failed!" << std::endl;
+        return;
+    }
+    std::remove("hello.txt");
+
+    std::cout << "CommandParserRedirectTest passed!" << std::endl;
+}
+
+void CommandParserTests::CommandParserRedirectWithQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+    std::string fileName = "hello world.txt";
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("cd > \"" + fileName + "\"")));
+        assert(cmd->args.size() == 0);
+        auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
+        assert(stdOut != nullptr);
+        assert(stdOut->file_name == fileName);
+    } catch (...) {
+        std::cout << "CommandParserRedirectWithQuotesTest failed!" << std::endl;
+        return;
+    }
+    std::remove(fileName.c_str());
+
+    std::cout << "CommandParserRedirectWithQuotesTest passed!" << std::endl;
+}
+
+void CommandParserTests::CommandParserRedirectWithNestedQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<ExternalCommand>(dynamic_cast<ExternalCommand&>(parser.Parse("echo \"writing to \"hello.txt\".\" > hello.txt")));
+        assert(cmd->args.size() == 2);
+        assert(cmd->args[0] == "echo");
+        assert(cmd->args[1] == "writing to \"hello.txt\".");
+        auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
+        assert(stdOut != nullptr);
+        assert(stdOut->file_name == "hello.txt");
+    } catch (...) {
+        std::cout << "CommandParserRedirectWithNestedQuotesTest failed!" << std::endl;
+        return;
+    }
+    std::remove("hello.txt");
+
+    std::cout << "CommandParserRedirectWithNestedQuotesTest passed!" << std::endl;
+}
+
+void CommandParserTests::CommandParserDoubleRedirectTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("cd > hello.txt > hello.txt")));
+    } catch (...) {
+        std::cout << "CommandParserDoubleRedirectTest passed!" << std::endl;
+        return;
+    }
+    std::remove("hello.txt");
+
+    std::cout << "CommandParserDoubleRedirectTest failed!" << std::endl;
+}
+
 void CommandParserTests::ExecuteTests() {
     CommandParserTest();
     CommandParserBuiltinTests();
@@ -203,4 +290,8 @@ void CommandParserTests::ExecuteTests() {
     CommandParserWithQuotesTest();
     CommandParserWithNestedQuotesTest();
     CommandParserWithUnfinishedQuotesTest();
+    CommandParserRedirectTest();
+    CommandParserRedirectWithQuotesTest();
+    CommandParserRedirectWithNestedQuotesTest();
+    CommandParserDoubleRedirectTest();
 }

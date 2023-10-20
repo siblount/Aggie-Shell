@@ -15,5 +15,9 @@ namespace CommandParserTests {
     void CommandParserWithQuotesTest();
     void CommandParserWithNestedQuotesTest();
     void CommandParserWithUnfinishedQuotesTest();
+    void CommandParserRedirectTest();
+    void CommandParserRedirectWithQuotesTest();
+    void CommandParserRedirectWithNestedQuotesTest();
+    void CommandParserDoubleRedirectTest();
     void ExecuteTests();
 }
