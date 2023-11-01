@@ -6,10 +6,14 @@ Command::Command(CLI* cli, std::vector<std::string> args, std::istream* __stdin,
 
 Command::~Command() {
     // Delete the standard output, input, and error streams if they are ofstream_extended.
-    if (dynamic_cast<ofstream_extended*>(standardOutput)) {
-        delete standardOutput;
-    }
-    if (dynamic_cast<ofstream_extended*>(standardError)) {
-        delete standardError;
-    }
+    try {
+        if (dynamic_cast<ofstream_extended*>(standardOutput)) {
+            delete standardOutput;
+        }
+    } catch (...) {}
+    try {
+        if (dynamic_cast<ofstream_extended*>(standardInput)) {
+            delete standardInput;
+        }
+    } catch (...) {}
 }

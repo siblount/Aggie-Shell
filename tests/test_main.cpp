@@ -5,6 +5,7 @@
 #include "command_parser_tests.hpp"
 #include "external_command_tests.hpp"
 #include "command_factory_tests.hpp"
+#include "command_tests.hpp"
 
 int main() {
     CLITests::ExecuteTests();
@@ -14,6 +15,6 @@ int main() {
     CommandParserTests::ExecuteTests();
     ExternalCommandTests::ExecuteTests();
     CommandFactoryTests::ExecuteTests();
-    
+    CommandTests::ExecuteTests();
     return 0;
 }
