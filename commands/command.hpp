@@ -26,7 +26,11 @@ class Command {
         /// @param __stdout The standard output stream to use for the command. If NULL, will use default standard output.
         Command(CLI* cli, std::vector<std::string> args, std::istream* __stdin, std::ostream* __stderr, std::ostream* __stdout);
         
+        /// @brief Destroys the command and releases any streams if they are ofstream_extended.
+        ~Command();
+        
         /// @brief Executes the command.
         /// @return The exit code of the command.
         virtual int Execute() = 0;
+        
 };
