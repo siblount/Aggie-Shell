@@ -15,7 +15,9 @@ ExternalCommand::ExternalCommand(CLI* cli, std::vector<std::string> args, std::i
 
 struct Pipe {
     int fd[2];
-    Pipe() { pipe(fd); }
+    Pipe() { 
+        if (pipe(fd) == -1) throw std::runtime_error("Failed to create a pipe");
+    }
     inline int GetReadPipe() { return fd[0]; }
     inline int GetWritePipe() { return fd[1]; }
     ~Pipe() {
