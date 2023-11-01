@@ -28,7 +28,7 @@ int CLI::Run() {
             command.Execute();
 
             // Special check if the command is the exit command.
-            if (typeid(command) == typeid(ExitCommand)) {
+            if (typeid(command) == typeid(ExitCommand) && command.args.size() == 0) {
                 break;
             }
 
