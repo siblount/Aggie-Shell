@@ -240,6 +240,35 @@ void CommandParserTests::CommandParserRedirectWithQuotesTest() {
     std::cout << "CommandParserRedirectWithQuotesTest passed!" << std::endl;
 }
 
+void CommandParserTests::CommandParserRedirectWithSingleQuotesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new CommandFactory{*cli};
+    std::string fileName = "hello world.txt";
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("echo 'hello world' > '" + fileName + "'")));
+        assert(cmd->args.size() == 1);
+        auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
+        assert(stdOut != nullptr);
+        assert(stdOut->file_name == fileName);
+
+        // Check to see if the file was written to.
+        std::ifstream file{fileName};
+        std::string line;
+        std::getline(file, line);
+        file.close();
+        assert(line == "hello world");
+    } catch (...) {
+        std::cout << "CommandParserRedirectWithSingleQuotesTest failed!" << std::endl;
+        return;
+    }
+    std::remove(fileName.c_str());
+
+    std::cout << "CommandParserRedirectWithSingleQuotesTest passed!" << std::endl;
+}
+
 void CommandParserTests::CommandParserRedirectWithNestedQuotesTest() {
     auto deps = new CLIDependencies{};
     auto cli = CommandParserTests::NewCLI(deps);
@@ -293,5 +322,6 @@ void CommandParserTests::ExecuteTests() {
     CommandParserRedirectTest();
     CommandParserRedirectWithQuotesTest();
     CommandParserRedirectWithNestedQuotesTest();
+    CommandParserRedirectWithSingleQuotesTest();
     CommandParserDoubleRedirectTest();
 }
