@@ -58,6 +58,7 @@
         "cstring": "cpp",
         "map": "cpp",
         "regex": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "unordered_set": "cpp"
     }
 }
