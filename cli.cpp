@@ -59,6 +59,7 @@ int CLI::Run(std::istream& input) {
             break;
         }
     }
+    commandFactory->GetCommand("exit", std::vector<std::string>{}).Execute();
     return 0;
 }
 

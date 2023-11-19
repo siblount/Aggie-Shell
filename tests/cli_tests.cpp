@@ -78,6 +78,19 @@ void CLITests::CLIBatchMultilineTest() {
     std::cout << "CLIBatchMultilineTest passed!" << std::endl;
 }
 
+void CLITests::CLIBatchMultilineWithoutExitTest() {
+    CLIDependencies deps;
+    auto cli = NewCLI(&deps);
+    std::istringstream input("cd /ligma \n cd /sugma");
+
+    assert(RunCLI(cli.get(), input) == 0);
+    assert(deps.env->getenv("PWD") == "/sugma");
+    assert(deps.cli_output->str().find("Exiting Aggie Shell by Solomon Blount...") != std::string::npos);
+    assert(deps.cli_error->str().empty());
+    std::cout << "CLIBatchMultilineWithoutExitTest passed!" << std::endl;
+
+}
+
 /// @brief Executes all CLI tests.
 void CLITests::ExecuteTests() {
     CLITest();
@@ -86,4 +99,5 @@ void CLITests::ExecuteTests() {
     CLIDoesntExitOnError();
     CLIBatchTest();
     CLIBatchMultilineTest();
+    CLIBatchMultilineWithoutExitTest();
 }

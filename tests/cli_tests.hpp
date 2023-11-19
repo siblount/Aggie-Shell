@@ -10,4 +10,5 @@ namespace CLITests {
     void CLITest();
     void CLIBatchTest();
     void CLIBatchMultilineTest();
+    void CLIBatchMultilineWithoutExitTest();
 }
