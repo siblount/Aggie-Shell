@@ -8,4 +8,6 @@ namespace CLITests {
     void CLIHomeCursorTest();
     void CLIDoesntExitOnError();
     void CLITest();
+    void CLIBatchTest();
+    void CLIBatchMultilineTest();
 }

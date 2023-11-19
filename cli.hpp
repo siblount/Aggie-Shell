@@ -27,9 +27,13 @@ struct CLI {
     /// @param standardOutput The output stream to write to.
     CLI(Environment* env, CommandFactory* commandFactory, std::istream* standardInput, std::ostream* standardError, std::ostream* standardOutput);
 
-    /// @brief Runs the CLI.
+    /// @brief Runs the CLI in interactive mode.
     /// @return The exit code of the CLI.
     int Run();
+    /// @brief Runs the CLI in batch mode with the given input.
+    /// @param input The input to run the CLI with.
+    /// @return The exit code of the CLI.
+    int Run(std::istream& input);
     private:
         /// @brief Gets the suffix to display after the command prompt.
         /// @return "ash>" if the current working directory is the home directory, otherwise "ash:cwd>"

@@ -40,6 +40,28 @@ int CLI::Run() {
     return 0;
 }
 
+int CLI::Run(std::istream& input) {
+    std::string line;
+    while (std::getline(input, line)) {
+        // If it fails, then we stop and return the exit code.
+        try {
+            Command& command = CommandParser{commandFactory}.Parse(line);
+            command.Execute();
+
+            // Special check if the command is the exit command.
+            if (typeid(command) == typeid(ExitCommand) && command.args.size() == 0) {
+                return 0;
+            }
+
+            delete &command; 
+        } catch (std::exception& e) {
+            *standardError << "An error has occurred\n";
+            break;
+        }
+    }
+    return 0;
+}
+
 std::string CLI::GetAshSuffix() {
     auto cwd = env->getcwd();
     auto home = env->getenv("HOME");

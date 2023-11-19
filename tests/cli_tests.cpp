@@ -1,6 +1,7 @@
 #include <cassert>
 #include <memory>
 #include <sstream>
+#include <iostream>
 
 #include "cli_tests.hpp"
 #include "util/cliutil.hpp"
@@ -54,10 +55,35 @@ void CLITests::CLIDoesntExitOnError() {
     std::cout << "CLIDoesntExitOnError passed!" << std::endl;
 }
 
+void CLITests::CLIBatchTest() {
+    CLIDependencies deps;
+    auto cli = NewCLI(&deps);
+    std::istringstream input("exit");
+
+    assert(RunCLI(cli.get(), input) == 0);
+    assert(deps.cli_output->str().find("Exiting Aggie Shell by Solomon Blount...") != std::string::npos);
+    assert(deps.cli_error->str().empty());
+    std::cout << "CLIBatchTest passed!" << std::endl;
+}
+
+void CLITests::CLIBatchMultilineTest() {
+    CLIDependencies deps;
+    auto cli = NewCLI(&deps);
+    std::istringstream input("cd /ligma \n exit");
+
+    assert(RunCLI(cli.get(), input) == 0);
+    assert(deps.env->getenv("PWD") == "/ligma");
+    assert(deps.cli_output->str().find("Exiting Aggie Shell by Solomon Blount...") != std::string::npos);
+    assert(deps.cli_error->str().empty());
+    std::cout << "CLIBatchMultilineTest passed!" << std::endl;
+}
+
 /// @brief Executes all CLI tests.
 void CLITests::ExecuteTests() {
     CLITest();
     CLIHomeCursorTest();
     CLINonHomeCursorTest();
     CLIDoesntExitOnError();
+    CLIBatchTest();
+    CLIBatchMultilineTest();
 }

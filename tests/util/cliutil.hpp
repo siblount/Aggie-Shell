@@ -17,4 +17,9 @@ struct CLIDependencies {
 /// @param cli The CLI to run.
 int RunCLI(CLI* cli);
 
+/// @brief Runs the CLI in a separate thread and waits for the result.
+/// @param cli The CLI to run.
+/// @param input The input to run the CLI with.
+int RunCLI(CLI* cli, std::istream& input);
+
 std::shared_ptr<CLI> NewCLI(CLIDependencies* deps);
