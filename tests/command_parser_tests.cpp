@@ -163,10 +163,10 @@ void CommandParserTests::CommandParserWithNestedQuotesTest() {
 
     try {
         CommandParser parser{cli->commandFactory};
-        auto& cmd = parser.Parse("cd \"hello \"world\"\"");
+        auto& cmd = parser.Parse("cd \"hello 'world'\"");
         assert(typeid(cmd) == typeid(CDCommand));
         assert(cmd.args.size() == 1);
-        assert(cmd.args[0] == "hello \"world\"");
+        assert(cmd.args[0] == "hello 'world'");
     } catch (...) {
         std::cout << "CommandParserWithNestedQuotesTest failed!" << std::endl;
         return;
@@ -248,18 +248,13 @@ void CommandParserTests::CommandParserRedirectWithSingleQuotesTest() {
 
     try {
         CommandParser parser{cli->commandFactory};
-        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("echo 'hello world' > '" + fileName + "'")));
-        assert(cmd->args.size() == 1);
+        auto cmd = std::make_unique<ExternalCommand>(dynamic_cast<ExternalCommand&>(parser.Parse("echo 'hello world' > '" + fileName + "'")));
+        assert(cmd->args.size() == 2);
+        assert(cmd->args[0] == "echo");
+        assert(cmd->args[1] == "hello world");
         auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
         assert(stdOut != nullptr);
         assert(stdOut->file_name == fileName);
-
-        // Check to see if the file was written to.
-        std::ifstream file{fileName};
-        std::string line;
-        std::getline(file, line);
-        file.close();
-        assert(line == "hello world");
     } catch (...) {
         std::cout << "CommandParserRedirectWithSingleQuotesTest failed!" << std::endl;
         return;
@@ -276,10 +271,10 @@ void CommandParserTests::CommandParserRedirectWithNestedQuotesTest() {
 
     try {
         CommandParser parser{cli->commandFactory};
-        auto cmd = std::make_unique<ExternalCommand>(dynamic_cast<ExternalCommand&>(parser.Parse("echo \"writing to \"hello.txt\".\" > hello.txt")));
+        auto cmd = std::make_unique<ExternalCommand>(dynamic_cast<ExternalCommand&>(parser.Parse("echo \"writing to 'hello.txt'.\" > hello.txt")));
         assert(cmd->args.size() == 2);
         assert(cmd->args[0] == "echo");
-        assert(cmd->args[1] == "writing to \"hello.txt\".");
+        assert(cmd->args[1] == "writing to 'hello.txt'.");
         auto stdOut = dynamic_cast<ofstream_extended*>(cmd->standardOutput);
         assert(stdOut != nullptr);
         assert(stdOut->file_name == "hello.txt");

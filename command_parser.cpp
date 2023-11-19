@@ -11,11 +11,17 @@
 
 CommandParser::CommandParser(CommandFactory* factory) : factory{factory} {}
 
+// TODO: Fails when the following is passed 'echo 'hello world' > 'file.txt'
 std::vector<std::string> ParseCommandLine(std::string commandLine) {
     // This regex matches quoted strings and non-whitespace strings.
     // Such as "echo 'hello world'" as "echo", "'hello world'".
     // Or "echo hello world" as "echo", "hello", "world".
-    std::regex re(R"(".+"|\'.+\'|\S+)"); 
+    // ("[^"]*"|'[^']*')|(`\S+`|\S+) <-- hangs
+    // ((\"[^\"]*\")|(\'[^\']*\')|(`[^`]*`)|(\S+))
+    // (?<=\s|^)(?:"[^"]*"|'[^']*'|\S+)
+    // std::regex re(R"(".+"|\'.+\'|\S+)"); // <-- old regex
+    std::regex re("(\"[^\"]*\")|('[^']*')|(`[^`]*`)|(\\S+)"); 
+
     std::sregex_iterator it(commandLine.begin(), commandLine.end(), re);
     std::sregex_iterator reg_end;
     std::vector<std::string> matches;
