@@ -20,5 +20,6 @@ namespace CommandParserTests {
     void CommandParserRedirectWithNestedQuotesTest();
     void CommandParserRedirectWithSingleQuotesTest();
     void CommandParserDoubleRedirectTest();
+    void CommandParserDoubleRedirectFilesTest();
     void ExecuteTests();
 }

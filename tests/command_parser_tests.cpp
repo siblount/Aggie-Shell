@@ -304,6 +304,23 @@ void CommandParserTests::CommandParserDoubleRedirectTest() {
     std::cout << "CommandParserDoubleRedirectTest failed!" << std::endl;
 }
 
+void CommandParserTests::CommandParserDoubleRedirectFilesTest() {
+    auto deps = new CLIDependencies{};
+    auto cli = CommandParserTests::NewCLI(deps);
+    cli->commandFactory = new FakeCommandFactory{*cli};
+
+    try {
+        CommandParser parser{cli->commandFactory};
+        auto cmd = std::make_unique<CDCommand>(dynamic_cast<CDCommand&>(parser.Parse("cd > hello.txt bob.txt")));
+    } catch (...) {
+        std::cout << "CommandParserDoubleRedirectFilesTest passed!" << std::endl;
+        return;
+    }
+    std::remove("hello.txt");
+
+    std::cout << "CommandParserDoubleRedirectFilesTest failed!" << std::endl;
+}
+
 void CommandParserTests::ExecuteTests() {
     CommandParserTest();
     CommandParserBuiltinTests();
@@ -319,4 +336,5 @@ void CommandParserTests::ExecuteTests() {
     CommandParserRedirectWithNestedQuotesTest();
     CommandParserRedirectWithSingleQuotesTest();
     CommandParserDoubleRedirectTest();
+    CommandParserDoubleRedirectFilesTest();
 }

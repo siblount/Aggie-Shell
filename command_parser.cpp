@@ -55,15 +55,26 @@ Command& CommandParser::Parse(std::string command) {
         throw std::runtime_error("Too many redirects");
     }
 
+     
+
     // Verify to see if we have redirected standard output to a file.
     // If it contains the ">" character, then create a file stream to the next token in the vector.
     auto it = std::find(tokens.begin(), tokens.end(), ">");
+
+    // TODO: Create an error if multiple files are attempted to be redirected to.
+
+    bool seen = false;
     if (it != tokens.end()) {
+        // If it + 2 is not the end of the vector, then we have multiple file names.
+        if (it + 2 != tokens.end()) {
+            throw std::runtime_error("Too many redirects");
+        }
         // Create a file stream to the next token in the vector.
         std::string fileName = *(it + 1);
         auto file = new ofstream_extended(fileName);
         // Remove both the ">" character and the token after that from the vector.
         tokens.erase(it, it + 2);
+
         return factory->GetCommand(commandName, tokens, &std::cin, file, file);
     }
     // Otherwise, use default stdin, stdout, and stderr.
