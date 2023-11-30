@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <sstream>
 #include <filesystem>
+#include <memory>
 
 #include "cli.hpp"
 #include "os_environment.hpp"
@@ -24,15 +25,13 @@ int CLI::Run() {
         *standardOutput << GetAshSuffix();
         std::getline(*standardInput, input);
         try {
-            Command& command = CommandParser{commandFactory}.Parse(input);
-            command.Execute();
+            std::unique_ptr<Command> command(&CommandParser{commandFactory}.Parse(input));
+            command->Execute();
 
             // Special check if the command is the exit command.
-            if (typeid(command) == typeid(ExitCommand) && command.args.size() == 0) {
+            if (typeid(*command.get()) == typeid(ExitCommand) && command->args.size() == 0) {
                 break;
             }
-
-            delete &command; 
         } catch (std::exception& e) {
             *standardError << "An error has occurred\n";
         }
@@ -45,15 +44,13 @@ int CLI::Run(std::istream& input) {
     while (std::getline(input, line)) {
         // If it fails, then we stop and return the exit code.
         try {
-            Command& command = CommandParser{commandFactory}.Parse(line);
-            command.Execute();
+            std::unique_ptr<Command> command(&CommandParser{commandFactory}.Parse(line));
+            command->Execute();
 
             // Special check if the command is the exit command.
-            if (typeid(command) == typeid(ExitCommand) && command.args.size() == 0) {
+            if (typeid(command) == typeid(ExitCommand) && command->args.size() == 0) {
                 return 0;
             }
-
-            delete &command; 
         } catch (std::exception& e) {
             *standardError << "An error has occurred\n";
             break;
