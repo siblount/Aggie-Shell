@@ -17,6 +17,8 @@ There are multiple ways to compile and run this program:
         - If you do not, you need to cd into the project root folder.
     b) Run the following g++ command: g++ *.cpp commands/*.cpp -o ash
     c) Run the command with: ./ash
+    d) For batch mode, pass in the path to the batch file.
+        - Example 1: ./ash test.file
 
 NOTE: If any errors occur, you either did not follow the instructions, missing files, or you are running this on Mac or Windows.
 It has not been tested on Mac, but only Linux.
@@ -26,13 +28,17 @@ It has not been tested on Mac, but only Linux.
     b) type "make" or "make -s" (hides the commands being run)
     c) If no errors outputted, then you should see the executable in the bin folder.
     d) Run the command via the terminal "bin/ash" or just "./ash" if you cd into bin.
+        - For batch mode, pass in the path to the batch file.
+            - Example 1: bin/ash test.file
+            - Example 2: ./ash ../test.file
 
 NOTE: If you do not have make installed, you can not run option #2.
 
 3) Visual Studio Code on Linux, VSC on WSL, Ubuntu on Windows, Debian on Windows, etc:
     a) Select ash.cpp
     b) Hit the play button on the top-right corner on VSC.
-    c) A dialogue will pop up to prompt for which task; choose the one with "C/C++: g++ build ash" label! DO NOT CHOOSE ANY OTHER ONE.
+    c) A dialogue will pop up to prompt for which task; choose the one with "Debug Ash" label! DO NOT CHOOSE ANY OTHER ONE.
+        - This one is setup to automatically pass in "test.file" as an argument to the ash console. You can remove the argument in launch.json, line 39.
     d) A terminal may pop up. If you do not see it, it may be because you are in "Debug Console" tab. Click on Terminal to interact with the program.
 
 NOTE: You may need the C/C++ extension for this to work.
