@@ -35,7 +35,7 @@ It has not been tested on Mac, but only Linux.
 NOTE: If you do not have make installed, you can not run option #2.
 
 3) Visual Studio Code on Linux, VSC on WSL, Ubuntu on Windows, Debian on Windows, etc:
-    a) Select ash.cpp
+    a) Select ash.cpp (or any cpp file).
     b) Hit the play button on the top-right corner on VSC.
     c) A dialogue will pop up to prompt for which task; choose the one with "Debug Ash" label! DO NOT CHOOSE ANY OTHER ONE.
         - This one is setup to automatically pass in "test.file" as an argument to the ash console. You can remove the argument in launch.json, line 39.
