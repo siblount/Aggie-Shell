@@ -1,0 +1,4 @@
+printf "You are now running a program in batch mode using Aggie-Shell created by Solomon Blount. To start things off, I will print the current working directory, I will redirect ls into a file, then display it on screen. \nBTW: This echo command counts as one distinct command.\nCurrent working directory: "
+pwd
+ls -al > ls-output.txt
+cat ls-output.txt
